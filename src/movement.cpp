@@ -167,6 +167,60 @@ if(fabs(CSpeed)<fabs((double)Speed))
 /** Moves the robot forward or backward. Negative speed moves
  * the robot forward. Positive value moves it backward. (Ik it's fucked up)
  * @param KVals the PID constants
+ * @param Speed the speed, from -100 to 100
+ * @param dist distance travelled, in inches
+ * @param AccT time to max speed (s)
+ * @param ABSHDG absolute heading of the robot
+ * @param brake Brake at end, or coast
+ * @param CustomTask Name of Custom task to run, Always DEFINE CUSTOM TASK IN FORM int NAME(int VAL)
+ * @param CustomTaskVal Value to be passed into Custom Task
+ */
+void MoveEncoderPIDDoTask(PIDDataSet KVals, int Speed, double dist,double AccT, double ABSHDG,bool brake, int (*CustomTask)(int),int CustomTaskVAL){
+  int PH;
+  double CSpeed=0;
+  Zeroing(true,false);
+  ChassisDataSet SensorVals;
+  SensorVals=ChassisUpdate();
+  double PVal=0;
+  double IVal=0;
+  double DVal=0;
+  double LGV=0;//define local gyro variable.
+  PrevE=0;
+  double Correction=0;
+  Brain.Screen.clearScreen();
+
+  while(fabs(SensorVals.Avg) <= fabs(dist))
+  {
+    PH=CustomTask(CustomTaskVAL);
+    //std::cout << SensorVals.Avg << " " << dist << std::endl;
+if(fabs(CSpeed)<fabs((double)Speed))
+{
+  CSpeed+=Speed/AccT*0.02;
+}
+
+  SensorVals=ChassisUpdate();
+  LGV=SensorVals.HDG-ABSHDG*Inversion_Constant;
+  if(LGV>180) LGV=LGV-360;
+  PVal=KVals.kp*LGV;
+  IVal=IVal+KVals.ki*LGV*0.02;
+  DVal=KVals.kd*(LGV-PrevE);
+
+  Correction=PVal+IVal+DVal/0.02;
+
+  Move(CSpeed-Correction,CSpeed+Correction);
+  PrevE=LGV;
+  wait(20, msec);
+  }
+  if(brake){
+    BStop();
+    wait(120,msec);
+  }
+  else CStop();
+}
+
+/** Moves the robot forward or backward. Negative speed moves
+ * the robot forward. Positive value moves it backward. (Ik it's fucked up)
+ * @param KVals the PID constants
  * @param DeltaAngle the absolute heading to turn to
  * @param TE time to calculate turn (not time to turn)
  * @param brake Brake at end, or coast
@@ -257,6 +311,47 @@ void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHD
 
   while(Brain.Timer.value() <= TE)
   {
+if(fabs(CSpeed)<fabs((double)Speed))
+{
+  CSpeed+=Speed/AccT*0.02;
+}
+
+  SensorVals=ChassisUpdate();
+    LGV=SensorVals.HDG-ABSHDG*Inversion_Constant;
+  if(LGV>180) LGV=LGV-360;
+  PVal=KVals.kp*LGV;
+  IVal=IVal+KVals.ki*LGV*0.02;
+  DVal=KVals.kd*(LGV-PrevE);
+
+  Correction=PVal+IVal+DVal/0.02;
+
+  Move(-CSpeed-Correction,-CSpeed+Correction);
+  PrevE=LGV;
+  wait(20, msec);
+  }
+  if(brake){BStop();
+  wait(200,msec);}
+  else CStop();
+}
+
+
+void MoveTimePIDDoTask(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake, int (*CustomTask)(int),int CustomTaskVAL){
+  double CSpeed=0;
+  Zeroing(true,false);
+  ChassisDataSet SensorVals;
+  SensorVals=ChassisUpdate();
+  int PH;
+  double PVal=0;
+  double IVal=0;
+  double DVal=0;
+  double LGV=0;
+  PrevE=0;
+  double Correction=0;
+  Brain.Timer.reset();
+
+  while(Brain.Timer.value() <= TE)
+  {
+    PH=CustomTask(CustomTaskVAL);
 if(fabs(CSpeed)<fabs((double)Speed))
 {
   CSpeed+=Speed/AccT*0.02;

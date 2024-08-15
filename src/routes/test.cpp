@@ -6,11 +6,18 @@
 // TurnMaxTimePID(TestPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
 // MoveTimePID(TestPara, motor speed, time traveled (sec), time to full speed, heading, false);
 
+int CustomTask1(int PlaceHolder)
+{
+    Brain.Screen.setCursor(2,2);
+    Brain.Screen.print("%d",PlaceHolder);
+    return 0;
+}
+
 void test() {
     // declare initial conditions
     //PIDDataSet TestPara={4,0.1,0.2};
     PIDDataSet TestPara={1.5,0.1,0.15};
-    MoveEncoderPID(TestPara, 100, 36 , 0.4,0,true);
+    /*MoveEncoderPID(TestPara, 100, 36 , 0.4,0,true);
     MoveEncoderPID(TestPara, 30, 10, 0.4,0,true);
     Clamp.set(true);
     wait(200,msec);
@@ -24,7 +31,8 @@ void test() {
     TurnMaxTimePID(TestPara, 40, 0.9, true);
     Pistake.set(true);
     MoveEncoderPID(TestPara, -100, 60, 0.4, 40, true);
-    Pistake.set(false);
+    Pistake.set(false);*/
+    MoveEncoderPIDDoTask(TestPara, -100, 60, 0.4, 0, true,CustomTask1,13);
     /*MoveEncoderPID(TestPara, 100 , 65 ,0.4,0,true);
     TurnMaxTimePID(TestPara, 90, 0.4, true);
     MoveEncoderPID(TestPara, 100 , 50 ,0.4,90,true);

@@ -27,7 +27,7 @@ void MogoRushQual() {
     MoveEncoderPID(TestPara, 70, 10, 0.4, -20, true);
 
      //slow down to grab mogo
-    Clamp.set(true;); //close clamp 
+    Clamp.set(true); //close clamp 
     TurnMaxTimePID(TestPara, -90,  0.6, true);
     Pistake.set(false);
     RunRoller(-100);

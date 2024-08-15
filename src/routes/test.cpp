@@ -32,7 +32,7 @@ void test() {
     Pistake.set(true);
     MoveEncoderPID(TestPara, -100, 60, 0.4, 40, true);
     Pistake.set(false);*/
-    MoveEncoderPIDDoTask(TestPara, -100, 60, 0.4, 0, true,CustomTask1,13);
+    MoveEncoderPIDDoTask(TestPara, -100, 60, 0.4, 0, true, CustomTask1,13);
     /*MoveEncoderPID(TestPara, 100 , 65 ,0.4,0,true);
     TurnMaxTimePID(TestPara, 90, 0.4, true);
     MoveEncoderPID(TestPara, 100 , 50 ,0.4,90,true);

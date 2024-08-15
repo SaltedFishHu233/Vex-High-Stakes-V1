@@ -33,6 +33,6 @@ extern void MoveEncoderPIDDoTask(PIDDataSet KVals, int Speed, double dist,double
 extern void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake);
 void MaxTimePIDTurnOneSide(PIDDataSet KVals,double DeltaAngle,double TE, bool brake);
 void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake);
-extern void MoveTimePIDDoTask(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake, int (*CustomTask)(int),int CustomTaskVAL)
+extern void MoveTimePIDDoTask(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake, int (*CustomTask)(int),int CustomTaskVAL);
 
 #endif
